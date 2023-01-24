@@ -39,7 +39,13 @@ def get_route_cost(route_coordinate, game_map):
     :return: a floating point number representing the cost of the route
     """
     # Build a path from start to end that looks like [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 4)]
-    pass 
+    pass
+
+    import numpy
+    path = []
+
+    path.append(route_coordinate[1])   # need to alter 
+    
     return game_map[tuple(zip(*path))].sum()
 
 
