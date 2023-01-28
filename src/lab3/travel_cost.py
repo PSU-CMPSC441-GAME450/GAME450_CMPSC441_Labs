@@ -7,6 +7,9 @@ In this lab, you will write a function that calculates the cost of a route betwe
 A terrain is generated for you 
 '''
 import numpy as np
+from pathfinding.core.diagonal_movement import DiagonalMovement
+from pathfinding.core.grid import Grid 
+from pathfinding.finder.a_star import AStarFinder
 
 def get_route_cost(route_coordinate, game_map):
     """
@@ -34,7 +37,10 @@ def get_route_cost(route_coordinate, game_map):
     :return: a floating point number representing the cost of the route
     """
     # Build a path from start to end that looks like [(0, 0), (1, 1), (2, 2), (3, 3), (4, 4), (5, 4)]
+
+    # git added 
     pass 
+
     width = max(game_map.shape[0],game_map.shape[1])
 
     grid = Grid(width=width, height=width)
@@ -43,7 +49,14 @@ def get_route_cost(route_coordinate, game_map):
     end = grid.node(route_coordinate[1][0], route_coordinate[1][1])
     finder = AStarFinder(diagonal_movement = DiagonalMovement.always)
     path, pathcost  = finder.find_path(start, end, grid)
+
     return game_map[tuple(zip(*path))].sum()
+
+    # midn 
+    #kndsds
+    #sdjfndn
+    
+    
     
 
 
