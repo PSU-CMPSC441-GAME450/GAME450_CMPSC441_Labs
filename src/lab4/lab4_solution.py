@@ -43,9 +43,27 @@ class AiPlayer(Player):
     def __init__(self, name):
         super().__init__(name)
         self.initial_weapon = random_weapon_select()
+        self.opponent_type = 0
     
     def weapon_selecting_strategy(self):
-        pass
+        #AI will assume that opponent is single until it's weapon changes
+        if len(self.opponent_choices) == 0 or len(self.opponent_choices) == 1:
+            return self.initial_weapon
+
+        if self.opponent_type == 0:
+            if self.opponent_choices[-1] != self.opponent_choices[-2]:
+                if len(self.opponent_choices)%10 == 1:
+                    self.opponent_type = 1
+                else:
+                    self.opponent_type = 2
+
+        if self.opponent_type == 0:
+            return (self.opponent_choices[-1] + 1) % 3
+        elif self.opponent_type == 1:
+            return (self.opponent_choices[-1] + 1) % 3
+        else:
+            return (self.my_choices[-1] + 1) % 3
+
 
 
 if __name__ == '__main__':
