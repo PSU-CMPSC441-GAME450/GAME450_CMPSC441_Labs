@@ -28,7 +28,23 @@ from lab2.cities_n_routes import get_randomly_spread_cities, get_routes
 
 # TODO: Demo blittable surface helper function
 
+def generate_surface(size):
+    landscape = get_landscape(size)
+    print("Created a landscape of size", landscape.shape)
+    pygame_surface = pygame.surfarray.make_surface(landscape[:, :, :3]) 
+    return pygame_surface
 ''' Create helper functions here '''
+
+def drawCities(surface, cityList):
+    for location in cityList:
+        pygame.draw.circle(surface, color="white", radius=10, center=location) 
+        pygame.draw.circle(surface, color="black", radius=9, center=location) 
+        pygame.draw.circle(surface, color="orange", radius=8, center=location) 
+
+def drawRoutes(surface, cityDict, routes):
+    for route in routes:
+        pygame.draw.line(surface, color="black", start_pos=cityDict[route[0]], end_pos=cityDict[route[1]]) 
+
 
 if __name__ == "__main__":
     pygame.init()
@@ -36,16 +52,18 @@ if __name__ == "__main__":
     black = 1, 1, 1
 
     screen = pygame.display.set_mode(size)
-    landscape = get_landscape(size)
-    print("Created a landscape of size", landscape.shape)
-    pygame_surface = pygame.surfarray.make_surface(landscape[:, :, :3]) 
 
     city_names = ['Morkomasto', 'Morathrad', 'Eregailin', 'Corathrad', 'Eregarta',
                   'Numensari', 'Rhunkadi', 'Londathrad', 'Baernlad', 'Forthyr']
     city_locations = [] 
     routes = []
+    pygame_surface = generate_surface(size)
+
 
     ''' Setup cities and routes in here'''
+    city_locations = get_randomly_spread_cities(size, 10)
+    routes = get_routes(city_names)
+
 
     city_locations_dict = {name: location for name, location in zip(city_names, city_locations)}
     random.shuffle(routes)
@@ -60,7 +78,10 @@ if __name__ == "__main__":
         screen.blit(pygame_surface, (0, 0))
 
         ''' draw cities '''
+        drawCities(pygame_surface, city_locations)
+
 
         ''' draw first 10 routes '''
+        drawRoutes(pygame_surface, city_locations_dict, routes)
 
         pygame.display.flip()
