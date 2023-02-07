@@ -2,21 +2,27 @@ import matplotlib.pyplot as plt
 from perlin_noise import PerlinNoise
 import numpy as np
 
-def get_elevation(size):
+def get_elevation(size): # size = (640, 480)
     xpix, ypix = size
-    elevation = np.array([])
+    elevation = np.array([]) # elevation = (640, 480)
+
     '''Play around with perlin noise to get a better looking landscape (This is required for the lab)'''
+    noise = PerlinNoise(octaves=8, seed=2)
+    elevation = np.array([[noise([i/xpix, j/ypix]) for j in range(ypix)] for i in range(xpix)])
+    #to add 
+
 
     return elevation
 
-def elevation_to_rgba(elevation):
+def elevation_to_rgba(elevation): 
     xpix, ypix = np.array(elevation).shape
     colormap = plt.cm.get_cmap('gist_earth')
     elevation = (elevation - elevation.min())/(elevation.max()-elevation.min())
+
     ''' You can play around with colormap to get a landscape of your preference if you want '''
     landscape = np.array([colormap(elevation[i, j])[0:3] for i in range(xpix) for j in range(ypix)]).reshape(xpix, ypix, 3)*255
     landscape = landscape.astype('uint8')
-    return landscape
+    return landscape # landscape(640, 80, 5)
  
 
 get_landscape = lambda size: elevation_to_rgba(get_elevation(size))
