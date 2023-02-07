@@ -67,15 +67,14 @@ if __name__ == "__main__":
         screen.blit(pygame_surface, (0, 0))
 
         ''' draw cities '''
-        for i, city in enumerate(city_locations):
-            screen.blit(pygame_surface, (city_names, city_locations))
-            pass
-        # print(city_locations_dict['A'])
+        for city_name, city_location in city_locations_dict.items():
+            pygame.draw.circle(screen, (255, 0, 0), city_location, 5)
 
         ''' draw first 10 routes '''
-        #for i, city in enumerate(city_locations):
+        for i, (start_city, end_city) in enumerate(routes[:10]):
+            start = city_locations_dict[start_city]
+            end = city_locations_dict[end_city]
+            pygame.draw.line(screen, (255, 255, 0), start, end, 2)
 
-        
-        
 
         pygame.display.flip()
