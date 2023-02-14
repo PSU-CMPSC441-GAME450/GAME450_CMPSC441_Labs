@@ -16,6 +16,7 @@ You can always write non-modular code for the first time and then refactor it la
 '''
 
 import sys
+import itertools
 import pygame
 import random
 import numpy as np
