@@ -43,7 +43,7 @@ def drawCities(surface, cityList):
 
 def drawRoutes(surface, cityDict, routes):
     for route in routes:
-        pygame.draw.line(surface, color="black", start_pos=cityDict[route[0]], end_pos=cityDict[route[1]]) 
+        pygame.draw.line(surface, color="red", start_pos=cityDict[route[0]], end_pos=cityDict[route[1]]) 
 
 
 if __name__ == "__main__":
