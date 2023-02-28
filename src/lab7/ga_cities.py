@@ -89,7 +89,7 @@ def solution_to_cities(solution, size):
     :return: The cities are being returned as a list of lists.
     """
     cities = np.array(
-        list(map(lambda x: [int(x / size[0]), int(x % size[1])], solution))
+        list(map(lambda x: [int(x / size[0]), int(x % size[1])], solution)) # the solution is the pixel node of the city 
     )
     return cities
 
@@ -115,6 +115,9 @@ if __name__ == "__main__":
     n_cities = 10
     elevation = []
     """ initialize elevation here from your previous code"""
+    # use code that previously created 
+
+
     # normalize landscape
     elevation = np.array(elevation)
     elevation = (elevation - elevation.min()) / (elevation.max() - elevation.min())
@@ -128,7 +131,7 @@ if __name__ == "__main__":
 
     # Show one of the initial solutions.
     cities = ga_instance.initial_population[0]
-    cities = solution_to_cities(cities, size)
+    cities = solution_to_cities(cities, size) # pay attention to this function 
     show_cities(cities, landscape_pic)
 
     # Run the GA to optimize the parameters of the function.
