@@ -13,6 +13,7 @@ fulfilled. Clearly explain in comments which line of code and variables are used
 import matplotlib.pyplot as plt
 import pygad
 import numpy as np
+from perlin_noise import PerlinNoise
 
 import sys
 from pathlib import Path
@@ -116,7 +117,10 @@ if __name__ == "__main__":
     elevation = []
     """ initialize elevation here from your previous code"""
     # use code that previously created 
-
+    xpix, ypix = size
+    elevation = np.array([])
+    noise = PerlinNoise(octaves=8, seed=2)
+    elevation = np.array([[noise([i/xpix, j/ypix]) for j in range(ypix)] for i in range(xpix)])
 
     # normalize landscape
     elevation = np.array(elevation)
