@@ -32,7 +32,14 @@ def game_fitness(cities, idx, elevation, size):
     3. The cities may also not be on top of mountains or on top of each other
     """
 
-    # Penalize cities that are too close to each other
+    # Cities should have realistic distribution 
+    # This function calculates a penalty for cities that are too close to each other.
+    # It initializes dist_pentaly to 0 and then iterates over each city in the cities-
+    # -list. Then it calculates the distance between that city and every other city in-
+    # -the list using np.linalg.norm. If the distance is less than 1/10 of the width of-
+    # -the map stored in size[0] then it subtracts the difference between the distance-
+    #  and 1/10th of the width of the map from dist_penalty.
+    
     dist_penalty = 0
     for i, city in enumerate(cities):
         for j in range(i+1, len(cities)):
@@ -41,13 +48,6 @@ def game_fitness(cities, idx, elevation, size):
             if distance < size[0]/10:
                 dist_penalty += size[0]/10 - distance
     fitness -= dist_penalty
-
-    # Penalize cities that are too close to the edges of the map
-    edge_penalty = 0
-    for city in cities:
-        if city[0] < size[0]/10 or city[0] > size[0]*9/10 or city[1] < size[1]/10 or city[1] > size[1]*9/10:
-            edge_penalty += size[0]/10
-    fitness -= edge_penalty
 
     # Reward cities that are evenly distributed across the map
     x_centers = np.linspace(0, size[0], len(cities)+2)[1:-1]
@@ -58,7 +58,25 @@ def game_fitness(cities, idx, elevation, size):
     dist_reward = 1 / (np.max(dists) - np.min(dists))
     fitness += dist_reward
 
+    # Cites should not be on top of mountains or on top of each other-
+    # -This section of the function calculates a penalty for cities that- 
+    # -are too close to the edges of the map. It initializes a variable- 
+    # -called edge_penalty to 0 and then iterates over each city in the- 
+    # -cities list. It checks if the x or y coordinate of the city is- 
+    # -less than 1/10th or greater than 9/10th of the width or height of the- 
+    # -map (stored in size[0] and size[1] respectively). If the city is too-
+    # -close to the edge, it adds 1/10th of the width of the map to edge penalty.
+
+    edge_penalty = 0
+    for city in cities:
+        if city[0] < size[0]/10 or city[0] > size[0]*9/10 or city[1] < size[1]/10 or city[1] > size[1]*9/10:
+            edge_penalty += size[0]/10
+    fitness -= edge_penalty
+
     # Penalize cities that are in water
+    # This scetion initializes the variable water_penalty to keep track of all the-
+    # cities in water. The loop then goes through the cities to check if the elevation-
+    # at certain locations is less than 0.3, if it is then the city is in water.
     water_penalty = 0
     for city in cities:
         if elevation[int(city[0]), int(city[1])] < 0.3:
