@@ -31,7 +31,42 @@ def game_fitness(cities, idx, elevation, size):
     2. The cities should have a realistic distribution across the landscape
     3. The cities may also not be on top of mountains or on top of each other
     """
+
+    # Penalize cities that are too close to each other
+    dist_penalty = 0
+    for i, city in enumerate(cities):
+        for j in range(i+1, len(cities)):
+            other_city = cities[j]
+            distance = np.linalg.norm(city - other_city)
+            if distance < size[0]/10:
+                dist_penalty += size[0]/10 - distance
+    fitness -= dist_penalty
+
+    # Penalize cities that are too close to the edges of the map
+    edge_penalty = 0
+    for city in cities:
+        if city[0] < size[0]/10 or city[0] > size[0]*9/10 or city[1] < size[1]/10 or city[1] > size[1]*9/10:
+            edge_penalty += size[0]/10
+    fitness -= edge_penalty
+
+    # Reward cities that are evenly distributed across the map
+    x_centers = np.linspace(0, size[0], len(cities)+2)[1:-1]
+    y_centers = np.linspace(0, size[1], len(cities)+2)[1:-1]
+    dists = []
+    for city in cities:
+        dists.append(np.min(np.linalg.norm(np.array([x_centers, y_centers]).T - city, axis=1)))
+    dist_reward = 1 / (np.max(dists) - np.min(dists))
+    fitness += dist_reward
+
+    # Penalize cities that are in water
+    water_penalty = 0
+    for city in cities:
+        if elevation[int(city[0]), int(city[1])] < 0.3:
+            water_penalty += 1
+    fitness -= water_penalty
+
     return fitness
+
 
 
 def setup_GA(fitness_fn, n_cities, size):
