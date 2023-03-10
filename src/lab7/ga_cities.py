@@ -19,7 +19,7 @@ from pathlib import Path
 
 sys.path.append(str((Path(__file__) / ".." / ".." / "..").resolve().absolute()))
 
-from src.lab5.landscape import elevation_to_rgba
+from src.lab5.landscape import elevation_to_rgba, get_elevation
 
 
 def game_fitness(cities, idx, elevation, size):
@@ -30,6 +30,59 @@ def game_fitness(cities, idx, elevation, size):
     2. The cities should have a realistic distribution across the landscape
     3. The cities may also not be on top of mountains or on top of each other
     """
+    #COMMENT THIS FUNCTION
+    coordinates = solution_to_cities(cities, size)      # list of coordinates for each city
+    comparison = coordinates                            # duplicate list to compare
+    allowablySpaced = 1                                 # variable to check if all of the cities are spaced enough from each other
+    allSpaced = 1                                       # variable to check if all of the cities are spaced from each other
+    allSpacedWide = 1                                   # variable to check if all of the cities are spaced widely from each other
+
+    for c in coordinates:                               # iterate through each city
+        track1 = 0                                      # track outer loop
+        track2 = 0                                      # track inner loop
+        spaced = 1                                      # variable to check if one city is spaced from all others
+        if (elevation[c[0]][c[1]] < 0.55):              # increase fitness for optimal elevation
+            if(elevation[c[0]][c[1]] > 0.45):
+                fitness += 2        
+        elif (elevation[c[0]][c[1]] < 0.60):            # increase fitness for acceptable elevation
+            if(elevation[c[0]][c[1]] > 0.40):
+                fitness += 1.5        
+        elif (elevation[c[0]][c[1]] < 0.7):             # increase fitness for essential elevation
+            if(elevation[c[0]][c[1]] > 0.35):
+                fitness += 1
+        if (elevation[c[0]][c[1]] > 0.7 or elevation[c[0]][c[1]] < 0.35):       # return unacceptable fit for unusable elevation
+                return -100000
+        for comp in comparison:                         # compare each city to its neighbors
+                if (track1 != track2):                  # do not compare a city to itself
+                    if(abs(c[0] - comp[0]) > 150 & abs(c[1]-comp[1]) > 150):    # increase fitness for great diffusion
+                        fitness += 3
+                    elif(abs(c[0] - comp[0]) > 100 & abs(c[1]-comp[1]) > 100):  # increase fitness for acceptale diffusion
+                        fitness += 2
+                    elif(abs(c[0] - comp[0]) < 100 & abs(c[1]-comp[1]) < 100):  # decrease fitness for poor diffusion
+                        fitness -= 1
+                        spaced = 0                                              # cities are not spaced
+                        allSpacedWide = 0                                       # all cities cannot be spaced widely
+                    if(abs(c[0] - comp[0]) < 75 & abs(c[1]-comp[1]) < 75):      # decrease fitness for horrible diffusion
+                        spaced = 0                                              # cities are not spaced
+                        allSpacedWide = 0                                       # cities cannot be spaced widely
+                        allSpaced = 0                                           # cities cannot be spaced in general
+                        fitness = min(fitness, 0.0001)                          # reset fitness to starting value (if exceeded)
+                        fitness -= 1                                            # decrease fitness
+                    if(abs(c[0] - comp[0]) < 25 & abs(c[1]-comp[1]) < 25):      # heavily reduce fitness for unusable diffusion
+                        fitness -= 100
+                        allowablySpaced = 0
+                    if (spaced == 0):                                           # decrease fitness if not spaced
+                        fitness -= 50
+                    else:                                                       # increase fitness if spaced
+                        fitness += 4
+                track2 += 1                     
+        track1 += 1
+    if (allowablySpaced > 0):       # increase fitness if all cities are spaced from each other well enough to meet requirement
+        fitness += 100
+    if (allSpaced > 0):             # increase fitness tremedously if all cities are spaced from each other
+        fitness += 1000
+    if (allSpacedWide > 0):         # further inflate fitness if all cities are spaced widely (best case scenario)
+        fitness += 1000000
     return fitness
 
 
@@ -115,6 +168,7 @@ if __name__ == "__main__":
     n_cities = 10
     elevation = []
     """ initialize elevation here from your previous code"""
+    elevation = get_elevation(size)
     # normalize landscape
     elevation = np.array(elevation)
     elevation = (elevation - elevation.min()) / (elevation.max() - elevation.min())
