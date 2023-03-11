@@ -36,10 +36,12 @@ def game_fitness(cities, idx, elevation, size):
     allowablySpaced = 1                                 # variable to check if all of the cities are spaced enough from each other
     allSpaced = 1                                       # variable to check if all of the cities are spaced from each other
     allSpacedWide = 1                                   # variable to check if all of the cities are spaced widely from each other
+    magnitude = 5                                       # magnitude of separation variables 
 
+    track1 = 0                                          # track outer loop
+    track2 = 0                                          # track inner loop
     for c in coordinates:                               # iterate through each city
-        track1 = 0                                      # track outer loop
-        track2 = 0                                      # track inner loop
+
         spaced = 1                                      # variable to check if one city is spaced from all others
         if (elevation[c[0]][c[1]] < 0.55):              # increase fitness for optimal elevation
             if(elevation[c[0]][c[1]] > 0.45):
@@ -50,39 +52,69 @@ def game_fitness(cities, idx, elevation, size):
         elif (elevation[c[0]][c[1]] < 0.7):             # increase fitness for essential elevation
             if(elevation[c[0]][c[1]] > 0.35):
                 fitness += 1
-        if (elevation[c[0]][c[1]] > 0.7 or elevation[c[0]][c[1]] < 0.35):       # return unacceptable fit for unusable elevation
-                return -100000
+        if (elevation[c[0]][c[1]] > 0.7 or elevation[c[0]][c[1]] < 0.35):       # adjust to unacceptable fit for unusable elevation
+                fitness -= 10000
         for comp in comparison:                         # compare each city to its neighbors
                 if (track1 != track2):                  # do not compare a city to itself
-                    if(abs(c[0] - comp[0]) > 150 & abs(c[1]-comp[1]) > 150):    # increase fitness for great diffusion
-                        fitness += 3
-                    elif(abs(c[0] - comp[0]) > 100 & abs(c[1]-comp[1]) > 100):  # increase fitness for acceptale diffusion
+                    if(abs(c[0] - comp[0]) > 90 & abs(c[1]-comp[1]) > 80):    # increase fitness for great diffusion
                         fitness += 2
-                    elif(abs(c[0] - comp[0]) < 100 & abs(c[1]-comp[1]) < 100):  # decrease fitness for poor diffusion
-                        fitness -= 1
+                    elif(abs(c[0] - comp[0]) > 70 & abs(c[1]-comp[1]) > 60):  # increase fitness for acceptale diffusion
+                        fitness += 1.75
+                    elif(abs(c[0] - comp[0]) > 50 & abs(c[1]-comp[1]) > 40):  # increase fitness for acceptale diffusion
+                        fitness += 1.55
+                        allSpacedWide = 0                                       # all cities cannot be spaced widely
+                    elif(abs(c[0] - comp[0]) > 30 & abs(c[1]-comp[1]) > 20):  # increase fitness for acceptale diffusion
+                        fitness += 1            
+                        allSpacedWide = 0                                       # all cities cannot be spaced widely
+                        spaced = 0                                              # cities are not spaced
+                    elif(abs(c[0] - comp[0]) < 30 & abs(c[1]-comp[1]) < 20):  # decrease fitness for poor diffusion
+                        fitness -= 3
                         spaced = 0                                              # cities are not spaced
                         allSpacedWide = 0                                       # all cities cannot be spaced widely
-                    if(abs(c[0] - comp[0]) < 75 & abs(c[1]-comp[1]) < 75):      # decrease fitness for horrible diffusion
+                    if(abs(c[0] - comp[0]) < 25 & abs(c[1]-comp[1]) < 15):      # decrease fitness for horrible diffusion
                         spaced = 0                                              # cities are not spaced
                         allSpacedWide = 0                                       # cities cannot be spaced widely
                         allSpaced = 0                                           # cities cannot be spaced in general
                         fitness = min(fitness, 0.0001)                          # reset fitness to starting value (if exceeded)
                         fitness -= 1                                            # decrease fitness
-                    if(abs(c[0] - comp[0]) < 25 & abs(c[1]-comp[1]) < 25):      # heavily reduce fitness for unusable diffusion
+                    if(abs(c[0] - comp[0]) < 10 & abs(c[1]-comp[1]) < 5):      # heavily reduce fitness for unusable diffusion
                         fitness -= 100
                         allowablySpaced = 0
                     if (spaced == 0):                                           # decrease fitness if not spaced
-                        fitness -= 50
+                        fitness -= 20
                     else:                                                       # increase fitness if spaced
-                        fitness += 4
+                        fitness += 10
+                    if(abs(c[0] - comp[0]) < 90 & abs(c[1]-comp[1]) < 80):                  # set value for extra large spacing
+                        magnitude = 5 
+                        if(abs(c[0] - comp[0]) < 90 & abs(c[1]-comp[1]) < 80):              # set value for no extra large spacing 
+                            magnitude = 4
+                            if(abs(c[0] - comp[0]) < 70 & abs(c[1]-comp[1]) < 60):          # set value for no large spacing
+                                magnitude = 3
+                                if(abs(c[0] - comp[0]) < 50 & abs(c[1]-comp[1]) < 40):      # set value for no medium spacing
+                                    magnitude = 2
+                                    if(abs(c[0] - comp[0]) < 30 & abs(c[1]-comp[1]) < 20):  # set value for no small spacing
+                                        magnitude = 1
+
                 track2 += 1                     
         track1 += 1
     if (allowablySpaced > 0):       # increase fitness if all cities are spaced from each other well enough to meet requirement
-        fitness += 100
+        fitness += 10
+    else:
+        fitness -= 10000
+    if (magnitude == 1):            # decrease fitness if citites are too close
+        fitness -= 50
+    elif (magnitude == 2):          # increase fitness if citites are somewhat spread
+        fitness += 2
+    elif (magnitude == 3):          # increase fitness if citites are spread decently
+        fitness += 5
+    elif (magnitude == 4):          # increase fitness largely if citites are spread well
+        fitness += 20
+    elif (magnitude == 5):          # increase greatly if citites are spread far
+        fitness += 50  
     if (allSpaced > 0):             # increase fitness tremedously if all cities are spaced from each other
-        fitness += 1000
+        fitness += 60
     if (allSpacedWide > 0):         # further inflate fitness if all cities are spaced widely (best case scenario)
-        fitness += 1000000
+        fitness += 1000
     return fitness
 
 
