@@ -19,17 +19,25 @@ from pathlib import Path
 
 sys.path.append(str((Path(__file__) / ".." / ".." / "..").resolve().absolute()))
 
-from src.lab5.landscape import elevation_to_rgba
-
+import src.lab5.landscape as land
 
 def game_fitness(cities, idx, elevation, size):
     fitness = 0.0001  # Do not return a fitness of 0, it will mess up the algorithm.
+    total_fitness = 0
     """
     Create your fitness function here to fulfill the following criteria:
     1. The cities should not be under water
     2. The cities should have a realistic distribution across the landscape
     3. The cities may also not be on top of mountains or on top of each other
     """
+    #why is the list of cities just have one number in it?
+    for city in cities:
+        x, y = city
+        fitness = abs((elevation[x,y])-0.5)
+        total_fitness += fitness
+    
+    fitness = total_fitness/len(cities)
+
     return fitness
 
 
@@ -113,12 +121,12 @@ if __name__ == "__main__":
 
     size = 100, 100
     n_cities = 10
-    elevation = []
+    elevation = land.get_elevation(size)
     """ initialize elevation here from your previous code"""
     # normalize landscape
     elevation = np.array(elevation)
     elevation = (elevation - elevation.min()) / (elevation.max() - elevation.min())
-    landscape_pic = elevation_to_rgba(elevation)
+    landscape_pic = land.elevation_to_rgba(elevation)
 
     # setup fitness function and GA
     fitness = lambda cities, idx: game_fitness(
