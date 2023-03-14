@@ -7,6 +7,7 @@ You can usually improve the model by normalizing the input data. Try that and se
 from sklearn.metrics import confusion_matrix
 from sklearn.model_selection import train_test_split
 from sklearn.neighbors import KNeighborsClassifier
+from sklearn.preprocessing import StandardScaler
 import pandas as pd
 import numpy as np
 
@@ -27,12 +28,29 @@ x_train, x_test, y_train, y_test = train_test_split(
 """ Train a sklearn model here. """
 
 sklearn_model = None
-score = 0
+
+# Normalize the input data
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+
+# Train a k-nearest neighbors classifier
+k = 5
+sklearn_model = KNeighborsClassifier(n_neighbors=k)
+sklearn_model.fit(x_train, y_train)
+
 
 # Accuracy
 print("Accuracy of model: {}\n".format(sklearn_model.score(x_test, y_test)))
 
 
 """ Improve the model by normalizing the input data. """
+scaler = StandardScaler()
+x_train_norm = scaler.fit_transform(x_train)
+x_test_norm = scaler.transform(x_test)
+
+sklearn_model_norm = KNeighborsClassifier(n_neighbors=k)
+sklearn_model_norm.fit(x_train_norm, y_train)
+
 
 print("Accuracy of improved model: {}\n".format(sklearn_model.score(x_test, y_test)))
