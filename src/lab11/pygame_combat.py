@@ -29,8 +29,10 @@ class PyGameComputerCombatPlayer(CombatPlayer):
 def run_pygame_combat(combat_surface, screen, player_sprite):
     currentGame = Combat()
     player = PyGameHumanCombatPlayer("Legolas")
+
     """ Add a line below that will reset the player object
     to an instance of the PyGameAICombatPlayer class"""
+    player = PyGameAICombatPlayer("AI")
 
     opponent = PyGameComputerCombatPlayer("Computer")
     opponent_sprite = Sprite(
@@ -52,10 +54,15 @@ def run_pygame_combat(combat_surface, screen, player_sprite):
 
         states = list(reversed([(player.health, player.weapon) for player in players]))
         for current_player, state in zip(players, states):
-            current_player.selectAction(state)
+            if isinstance(current_player, PyGameAICombatPlayer):
+                current_player.selectAction(state)
+            else:
+                current_player.selectAction(state)
+
 
         currentGame.newRound()
         currentGame.takeTurn(player, opponent)
         print("%s's health = %d" % (player.name, player.health))
         print("%s's health = %d" % (opponent.name, opponent.health))
         currentGame.checkWin(player, opponent)
+
