@@ -31,6 +31,7 @@ def run_pygame_combat(combat_surface, screen, player_sprite):
     player = PyGameHumanCombatPlayer("Legolas")
     """ Add a line below that will reset the player object
     to an instance of the PyGameAICombatPlayer class"""
+    player = PyGameAICombatPlayer("LegolAI")
 
     opponent = PyGameComputerCombatPlayer("Computer")
     opponent_sprite = Sprite(
