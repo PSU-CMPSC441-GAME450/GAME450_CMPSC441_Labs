@@ -20,4 +20,4 @@ class PyGameAICombatPlayer(CombatPlayer):
         super().__init__(name)
 
     def weapon_selecting_strategy(self):
-        self.weapon = random.randrange(2)
+        self.weapon = random.randrange(3)
