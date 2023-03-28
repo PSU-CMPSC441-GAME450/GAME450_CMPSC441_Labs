@@ -150,7 +150,8 @@ if __name__ == "__main__":
             state.encounter_event = False
         else:
             player_sprite.draw_sprite(screen)
-        pygame.display.update()
-        if state.current_city == end_city:
-            print('You have reached the end of the game!')
-            break
+        
+       # pygame.display.update()
+       # if state.current_city == end_city:
+       #     print('You have reached the end of the game!')
+       #     break
