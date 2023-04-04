@@ -23,18 +23,17 @@ def run_episode(player1, player2):
         
         # create an instance of a combat
         episode = Combat()
-
-        # track the rewards
-        rewards = []
         
         # add all rewards to the list
         while not episode.gameOver:
             rewards.append(run_turn(episode, player1, player2))
+        
+        return rewards
 
 # main
 if __name__ == "__main__":
-        player = PyGameAICombatPlayer("playerOne")
-        opponent = PyGameComputerCombatPlayer("playerTwo")
-        rewards = []
-        rewards = run_episode(player, opponent)
-        print(rewards)
+    player = PyGameAICombatPlayer("playerOne")
+    opponent = PyGameComputerCombatPlayer("playerTwo")
+    rewards = []
+    rewards = run_episode(player, opponent)
+    print(rewards)
