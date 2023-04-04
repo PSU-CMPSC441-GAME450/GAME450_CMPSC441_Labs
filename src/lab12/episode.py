@@ -37,3 +37,4 @@ if __name__ == "__main__":
         opponent = PyGameComputerCombatPlayer("playerTwo")
         rewards = []
         rewards = run_episode(player, opponent)
+        print(rewards)
