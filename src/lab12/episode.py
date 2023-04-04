@@ -48,4 +48,4 @@ def run_episode(player1, player2):
         
     return observations
 
-
+    # return state, action, history 
