@@ -14,38 +14,30 @@ Reward is the reward for the player for that turn.
 import sys
 sys.path.append('/path/to/lab11')
 
+from lab11.turn_combat import CombatPlayer, Combat
+
 
 def run_episode(player1, player2):
-    players = [player1, player2]
-    player1.health, player2.health = 100, 100  # reset player health
-    observations = []
-    
-    while True:
-        player1_health, player2_health = player1.health, player2.health
-        states = [(player1_health, player1.weapon), (player2_health, player2.weapon)]
-        actions = [player.selectAction(state) for player, state in zip(players, states)]
-        rewards = [0, 0]
+    currentGame = Combat()
+    player1.reset()
+    player2.reset()
 
-        if actions[0] == actions[1]:
-            # both players selected same weapon
-            rewards = [0, 0]
-        elif (actions[0] + 1) % 3 == actions[1]:
-            # player 2 wins
-            player2.health -= 20
-            rewards = [-20, 20]
-        else:
-            # player 1 wins
-            player1.health -= 20
-            rewards = [20, -20]
+    observation = (player1.health, player2.health)
+    episode = [(observation, None, 0)]
 
-        observation = (player1_health, player2_health)
-        observations.append((observation, actions[0], rewards[0]))
-        observations.append(((player2_health, player1_health), actions[1], rewards[1]))
+    while not currentGame.gameOver:
+        action1 = player1.selectAction(observation)
+        action2 = player2.selectAction(observation[::-1])[::-1]
 
-        if player1.health <= 0 or player2.health <= 0:
-            # game over
-            break
-        
-    return observations
+        currentGame.newRound()
+        currentGame.takeTurn(player1, player2)
+        reward1 = currentGame.checkWin(player1, player2)
+        reward2 = -reward1
 
+        observation = (player1.health, player2.health)
+        episode.append((observation, action1, reward1))
+        episode.append((observation[::-1], action2, reward2))
+
+    return episode
+    pass
     # return state, action, history 
