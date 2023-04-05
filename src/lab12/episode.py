@@ -12,32 +12,36 @@ Action is simply the weapon selected by the player.
 Reward is the reward for the player for that turn.
 '''
 import sys
+import random
 sys.path.append('/path/to/lab11')
 
 from lab11.turn_combat import CombatPlayer, Combat
 
 
 def run_episode(player1, player2):
-    currentGame = Combat()
-    player1.reset()
-    player2.reset()
+ 
 
-    observation = (player1.health, player2.health)
-    episode = [(observation, None, 0)]
+    player1_health = 100
+    player2_health = 100
 
-    while not currentGame.gameOver:
-        action1 = player1.selectAction(observation)
-        action2 = player2.selectAction(observation[::-1])[::-1]
 
-        currentGame.newRound()
-        currentGame.takeTurn(player1, player2)
-        reward1 = currentGame.checkWin(player1, player2)
-        reward2 = -reward1
+    history = []
 
-        observation = (player1.health, player2.health)
-        episode.append((observation, action1, reward1))
-        episode.append((observation[::-1], action2, reward2))
 
-    return episode
-    pass
+    while player1_health > 0 and player2_health > 0:
+        p1_weapon = player1.select_weapon()
+        p2_weapon = player2.select_weapon()
+
+        p1_damage = random.randint(5, 20)
+        p2_damage = random.randint(5, 20)
+
+        player1_health -= p2_damage
+        player2_health -= p1_damage
+
+        p1_reward = p2_damage if player1_health <= 0 else p2_damage - p1_damage
+        p2_reward = p1_damage if player2_health <= 0 else p1_damage - p2_damage
+
+        history.append(((player1_health, player2_health), (p1_weapon, p2_weapon), (p1_reward, p2_reward)))
+
+    return history
     # return state, action, history 
