@@ -47,6 +47,8 @@ def run_turn(currentGame, player, opponent):
     print("%s's health = %d" % (opponent.name, opponent.health))
     reward = currentGame.checkWin(player, opponent)
 
+    # have to return player1 and player 2 health?
+
 
 def run_pygame_combat(combat_surface, screen, player_sprite):
     currentGame = Combat()

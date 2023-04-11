@@ -48,4 +48,6 @@ def run_episode(player1, player2):
         
     return observations
 
-    # return state, action, history 
+# need to collect all of the actions
+# return state, action, reward 
+
