@@ -12,42 +12,42 @@ Action is simply the weapon selected by the player.
 Reward is the reward for the player for that turn.
 '''
 import sys
+import random
 sys.path.append('/path/to/lab11')
+
+from lab11.turn_combat import CombatPlayer, Combat
 
 
 def run_episode(player1, player2):
-    players = [player1, player2]
-    player1.health, player2.health = 100, 100  # reset player health
-    observations = []
-    
-    while True:
-        player1_health, player2_health = player1.health, player2.health
-        states = [(player1_health, player1.weapon), (player2_health, player2.weapon)]
-        actions = [player.selectAction(state) for player, state in zip(players, states)]
-        rewards = [0, 0]
+ 
 
-        if actions[0] == actions[1]:
-            # both players selected same weapon
-            rewards = [0, 0]
-        elif (actions[0] + 1) % 3 == actions[1]:
-            # player 2 wins
-            player2.health -= 20
-            rewards = [-20, 20]
-        else:
-            # player 1 wins
-            player1.health -= 20
-            rewards = [20, -20]
+    player1_health = 100
+    player2_health = 100
 
-        observation = (player1_health, player2_health)
-        observations.append((observation, actions[0], rewards[0]))
-        observations.append(((player2_health, player1_health), actions[1], rewards[1]))
 
-        if player1.health <= 0 or player2.health <= 0:
-            # game over
-            break
-        
-    return observations
+    history = []
 
+<<<<<<< HEAD
 # need to collect all of the actions
 # return state, action, reward 
 
+=======
+
+    while player1_health > 0 and player2_health > 0:
+        p1_weapon = player1.select_weapon()
+        p2_weapon = player2.select_weapon()
+
+        p1_damage = random.randint(5, 20)
+        p2_damage = random.randint(5, 20)
+
+        player1_health -= p2_damage
+        player2_health -= p1_damage
+
+        p1_reward = p2_damage if player1_health <= 0 else p2_damage - p1_damage
+        p2_reward = p1_damage if player2_health <= 0 else p1_damage - p2_damage
+
+        history.append(((player1_health, player2_health), (p1_weapon, p2_weapon), (p1_reward, p2_reward)))
+
+    return history
+    # return state, action, history 
+>>>>>>> c0526fda864094b7cbed65b8d01e26b339cbadc8
