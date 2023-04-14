@@ -22,6 +22,8 @@ from lab11.pygame_combat import PyGameComputerCombatPlayer
 from lab11.sprite import Sprite
 from lab11.turn_combat import CombatPlayer
 from lab12.episode import run_episode
+from lab12.episode import player1
+from lab12.episode import player2
 
 
 from collections import defaultdict
@@ -76,12 +78,27 @@ def run_episodes(n_episodes):
         Return the action values as a dictionary of dictionaries where the keys are states and 
             the values are dictionaries of actions and their values.
     '''
+    # Initialize a dictionary to hold the returns for each state-action pair
+    action_values = {}
     
-
-
-
-
+    # Run n_episodes episodes
+    for i in range(n_episodes):
+        # Run an episode and get its history of returns for each state-action pair
+        episode_history = run_episode(player1, player2)
+        episode_returns = get_history_returns(episode_history)
+        
+        # Update the action values with the returns from this episode
+        for state, actions in episode_returns.items():
+            if state not in action_values:
+                action_values[state] = {}
+            for action, ret in actions.items():
+                if action not in action_values[state]:
+                    action_values[state][action] = ret
+                else:
+                    action_values[state][action] = (action_values[state][action] * i + ret) / (i + 1)
+    
     return action_values
+
 
 
 def get_optimal_policy(action_values):
