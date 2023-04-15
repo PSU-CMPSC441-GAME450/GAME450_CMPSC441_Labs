@@ -1,10 +1,13 @@
 import pygame
 from pathlib import Path
+import sys
 
-from sprite import Sprite
-from turn_combat import CombatPlayer, Combat
-from pygame_ai_player import PyGameAICombatPlayer
-from pygame_human_player import PyGameHumanCombatPlayer
+sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
+
+from lab11.sprite import Sprite
+from lab11.turn_combat import CombatPlayer, Combat
+from lab11.pygame_ai_player import PyGameAICombatPlayer
+from lab11.pygame_human_player import PyGameHumanCombatPlayer
 
 AI_SPRITE_PATH = Path("assets/ai.png")
 
@@ -46,6 +49,8 @@ def run_turn(currentGame, player, opponent):
     print("%s's health = %d" % (player.name, player.health))
     print("%s's health = %d" % (opponent.name, opponent.health))
     reward = currentGame.checkWin(player, opponent)
+
+    return [0,0,reward]
 
     # have to return player1 and player 2 health?
 

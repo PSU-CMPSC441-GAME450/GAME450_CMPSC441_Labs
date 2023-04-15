@@ -1,6 +1,6 @@
 import random
 import itertools
-from turn_combat import CombatPlayer
+from lab11.turn_combat import CombatPlayer
 
 class PyGameAIPlayer:
     def selectAction(self, state):
