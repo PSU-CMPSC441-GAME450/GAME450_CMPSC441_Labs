@@ -1,10 +1,10 @@
 import pygame
 from pathlib import Path
 
-from sprite import Sprite
-from turn_combat import CombatPlayer, Combat
-from pygame_ai_player import PyGameAICombatPlayer
-from pygame_human_player import PyGameHumanCombatPlayer
+from lab11.sprite import Sprite
+from lab11.turn_combat import CombatPlayer, Combat
+from lab11.pygame_ai_player import PyGameAICombatPlayer
+from lab11.pygame_human_player import PyGameHumanCombatPlayer
 
 AI_SPRITE_PATH = Path("assets/ai.png")
 
@@ -35,7 +35,7 @@ def draw_combat_on_window(combat_surface, screen, player_sprite, opponent_sprite
     pygame.display.update()
 
 
-def run_turn(currentGame, player, opponent):
+def run_turn(currentGame, player, opponent): # will have to alter this function to use in lab12 code 
     players = [player, opponent]
     states = list(reversed([(player.health, player.weapon) for player in players]))
     for current_player, state in zip(players, states):

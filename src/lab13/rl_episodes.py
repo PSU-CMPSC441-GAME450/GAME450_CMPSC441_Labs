@@ -19,7 +19,6 @@ from pathlib import Path
 sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
 
 from lab11.pygame_combat import PyGameComputerCombatPlayer
-from lab11.sprite import Sprite
 from lab11.turn_combat import CombatPlayer
 from lab12.episode import run_episode
 from lab12.episode import player1
