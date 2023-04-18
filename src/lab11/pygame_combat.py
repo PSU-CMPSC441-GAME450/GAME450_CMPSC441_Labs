@@ -2,11 +2,8 @@ import pygame
 from pathlib import Path
 import sys
 
-<<<<<<< HEAD
-=======
 sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
 
->>>>>>> dd8fbcaebd3df8d14e1735feaa486703ff12b7b2
 from lab11.sprite import Sprite
 from lab11.turn_combat import CombatPlayer, Combat
 from lab11.pygame_ai_player import PyGameAICombatPlayer
