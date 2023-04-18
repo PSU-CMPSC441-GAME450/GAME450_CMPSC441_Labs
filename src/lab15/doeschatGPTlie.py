@@ -15,4 +15,6 @@ def translate_response():
     embedding_1 = model.encode(sentences[0], convert_to_tensor = True)
     embedding_2 = model.encode(sentences[1], convert_to_tensor = True)
 
+    print(embedding_1)
+    print(embedding_2)
    # util.pytorch_cos_sim(embedding_1, embedding_2)  
