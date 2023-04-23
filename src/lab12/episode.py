@@ -11,6 +11,7 @@ Note that observation/state is a tuple of the form (player1_health, player2_heal
 Action is simply the weapon selected by the player.
 Reward is the reward for the player for that turn.
 '''
+import pygame
 import sys
 from pathlib import Path
 sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
@@ -18,22 +19,27 @@ sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
 from lab11.turn_combat import Combat
 from lab11.pygame_combat import run_turn, PyGameComputerCombatPlayer
 from lab11.pygame_ai_player import PyGameAICombatPlayer
+
 #health and weapon of both, action of player1, reward
 def run_episode(player1, player2):
-        
+        players = [player1, player2]
+
         # create an instance of a combat
         episode = Combat()
-        
+        output = []
+
         # add all rewards to the list
         while not episode.gameOver:
-            rewards.append(run_turn(episode, player1, player2))
+            obs = tuple(play.health for play in players)
+            reward = (run_turn(episode, player1, player2))
+            output.append((obs, player1.weapon, reward))
         
-        return rewards
+        return output
 
 # main
 if __name__ == "__main__":
     player = PyGameAICombatPlayer("playerOne")
     opponent = PyGameComputerCombatPlayer("playerTwo")
-    rewards = []
-    rewards = run_episode(player, opponent)
-    print(rewards)
+    allRewards = []
+    allRewards = run_episode(player, opponent)
+    print(allRewards)

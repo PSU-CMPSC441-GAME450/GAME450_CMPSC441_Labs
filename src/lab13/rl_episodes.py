@@ -63,6 +63,12 @@ def get_history_returns(history):
         )
     return returns
 
+def episode_to_list(episode_data):
+    result = []
+    for state, actions in episode_data.items():
+        for action, reward in actions.items():
+            result.append((state, action, reward))
+    return result
 
 def run_episodes(n_episodes):
     ''' Run 'n_episodes' random episodes and return the action values for each state-action pair.
@@ -73,8 +79,35 @@ def run_episodes(n_episodes):
         After all episodes have been run, calculate the average return for each state-action pair.
         Return the action values as a dictionary of dictionaries where the keys are states and 
             the values are dictionaries of actions and their values.
+            
+        values are floating point numbers
+        action_values = { (100, 100): { 0: value1, 1: value2, 2: value3,},
+        (80, 90):  { 0: value1, 1: value2, 2: value3}, ...}
+        }
     '''
+    player=PyGameRandomCombatPlayer("Player")
+    player2=PyGameComputerCombatPlayer("Opponent")
+    action_values = {}
+    
+    for i in range(n_episodes):
+        output = run_random_episode(player, player2)
+        temp = get_history_returns(output)
+        temp = episode_to_list(temp)
+        
+        for state, action, return_value in temp:
+            if state not in action_values:
+                action_values[state] = {}
+            if action not in action_values[state]:
+                action_values[state][action] = []
+            action_values[state][action].append(return_value)
 
+                         
+    for state in action_values:
+            for action in action_values[state]:
+                sum = 0
+                for i in action_values[state][action]:
+                    sum += i
+                action_values[state][action] = sum / len(action_values[state][action])
     return action_values
 
 
