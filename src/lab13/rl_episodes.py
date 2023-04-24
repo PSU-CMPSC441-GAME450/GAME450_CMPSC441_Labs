@@ -19,6 +19,7 @@ from pathlib import Path
 sys.path.append(str((Path(__file__) / ".." / "..").resolve().absolute()))
 
 from lab11.pygame_combat import PyGameComputerCombatPlayer
+from lab11.pygame_ai_player import PyGameAICombatPlayer
 from lab11.turn_combat import CombatPlayer
 from lab12.episode import run_episode
 
@@ -74,6 +75,32 @@ def run_episodes(n_episodes):
         Return the action values as a dictionary of dictionaries where the keys are states and 
             the values are dictionaries of actions and their values.
     '''
+    player = PyGameAICombatPlayer("AI")
+    opponent = PyGameComputerCombatPlayer("Computer")
+
+    action_values = {}
+
+    for episode in range(n_episodes):
+        print("/nEPISODE #", episode+1)
+        ep_values = run_episode(player, opponent)
+        history = get_history_returns(ep_values)
+
+        keys = history.keys()
+
+        for key in keys:
+            action_rewards = history[key].items()
+
+            if key not in action_values:
+                action_values[key] = defaultdict(list)
+            
+            for action in action_rewards:
+                action_values[key][action[0]].append(action[1])
+
+
+
+        player.health = 100
+        opponent.health = 100
+
 
     return action_values
 
@@ -88,7 +115,7 @@ def get_optimal_policy(action_values):
 def test_policy(policy):
     names = ["Legolas", "Saruman"]
     total_reward = 0
-    for _ in range(100):
+    for _ in range(10000):
         player1 = PyGamePolicyCombatPlayer(names[0], policy)
         player2 = PyGameComputerCombatPlayer(names[1])
         players = [player1, player2]

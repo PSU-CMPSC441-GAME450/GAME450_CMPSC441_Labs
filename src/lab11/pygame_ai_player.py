@@ -21,3 +21,4 @@ class PyGameAICombatPlayer(CombatPlayer):
 
     def weapon_selecting_strategy(self):
         self.weapon = random.randrange(3)
+        return self.weapon
