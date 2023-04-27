@@ -62,13 +62,29 @@ def run_pygame_combat(combat_surface, screen, player_sprite):
     """ Add a line below that will reset the player object
     to an instance of the PyGameAICombatPlayer class"""
 
+    player = PyGameAICombatPlayer("AI")
+    
+
     opponent = PyGameComputerCombatPlayer("Computer")
-    opponent_sprite = Sprite(
-        AI_SPRITE_PATH, (player_sprite.sprite_pos[0] - 100, player_sprite.sprite_pos[1])
+    opponent_sprite = Sprite(AI_SPRITE_PATH, (player_sprite.sprite_pos[0] - 100, player_sprite.sprite_pos[1])
     )
 
-    # Main Game Loop
-    while not currentGame.gameOver:
-        draw_combat_on_window(combat_surface, screen, player_sprite, opponent_sprite)
+    players = [player, opponent]
 
-        run_turn(currentGame, player, opponent)
+    states = list(reversed([(player.health, player.weapon) for player in players]))
+    for current_player, state in zip(players, states):
+            if isinstance(current_player, PyGameAICombatPlayer):
+                current_player.selectAction(state)
+            else:
+                current_player.selectAction(state)
+
+
+    currentGame.newRound()
+    currentGame.takeTurn(player, opponent)
+    print("%s's health = %d" % (player.name, player.health))
+    print("%s's health = %d" % (opponent.name, opponent.health))
+    currentGame.checkWin(player, opponent)
+
+
+
+    
