@@ -101,7 +101,7 @@ if __name__ == "__main__":
 
     """ Add a line below that will reset the player variable to 
     a new object of PyGameAIPlayer class."""
-    player = PyGameAIPlayer()
+    #player = PyGameAIPlayer()
     
     state = State(
         current_city=start_city,
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         else:
             player_sprite.draw_sprite(screen)
         
-       # pygame.display.update()
-       # if state.current_city == end_city:
-       #     print('You have reached the end of the game!')
-       #     break
+        pygame.display.update()
+        if state.current_city == end_city:
+            print('You have reached the end of the game!')
+            break
