@@ -96,7 +96,7 @@ if __name__ == "__main__":
 
     player_sprite = Sprite(sprite_path, cities[start_city])
 
-    #player = PyGameHumanPlayer()
+    player = PyGameHumanPlayer()
     
 
     """ Add a line below that will reset the player variable to 
@@ -152,6 +152,7 @@ if __name__ == "__main__":
             player_sprite.draw_sprite(screen)
         
         pygame.display.update()
-        if state.current_city == end_city:
-            print('You have reached the end of the game!')
-            break
+        
+        #if state.current_city == end_city:
+        #    print('You have reached the end of the game!')
+         #   break
