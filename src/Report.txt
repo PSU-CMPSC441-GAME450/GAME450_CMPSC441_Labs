@@ -1,0 +1,16 @@
+Abstract:
+
+
+    The goal of this project is to create an engaging game that challenges the player to explore different cities and fight robbers along the way. 
+The player will control an elf character and navigate through a map with different cities marked. 
+An AI player will be programmed in Python to play through the game like the player would. 
+    The game will be developed using Pygame, a popular Python library for game development. 
+The player will be able to use the number pad to move the elf to the different cities. The player
+will not be able to move from one city to another however unless there is an existing route.
+Everytime the player moves from one city to another there is a random chance that they encounter
+a robber. If there are robbers on the route, the player will engage in a battle with them.
+    The AI player will be implemented using reinforcement learning algorithms. 
+The system will match the player's actions to move through different cities and fight robbers.
+ There will also be an element of cost in the game, if the player does not have enough money 
+ to travel to a city then he will not be able to travel to the city. The player will also have
+ to pay attention to the health as when they are fighting 
