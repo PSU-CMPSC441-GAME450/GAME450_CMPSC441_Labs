@@ -17,30 +17,28 @@ class PyGameAIPlayer:
         current_city = state.current_city
         destination_city = state.destination_city
         routes = state.routes
-        
+
         # Find the routes that start from the current city
         valid_routes = [i for i, r in enumerate(routes) if r[0] == current_city]
-        
-        # If there are no valid routes, return a random action as before
+
+        # If there are no valid routes, throw an error
         if not valid_routes:
-            return random.randint(48, 57)
-        
+            print("Not a valid city!")
+
         # Find the neighboring cities that the player can travel to
         neighbors = [r[1] for i, r in enumerate(routes) if i in valid_routes]
-        
+
         # If the player is already traveling, return the current destination
         if state.travelling:
             return str(destination_city).encode()[0]
-        
+
         # Otherwise, select a random neighbor as the destination city
         destination_city = random.choice(neighbors)
         route_index = valid_routes[neighbors.index(destination_city)]
-        
+
         # Return the index of the selected route as the action
         return str(route_index).encode()[0]
-        
-        
-        
+
         
         
         
