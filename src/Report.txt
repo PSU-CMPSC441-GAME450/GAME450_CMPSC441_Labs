@@ -22,7 +22,7 @@ determinant on the AI techniques.
 AI components:
 1. AI Player movement 
 2. AI Player combat 
-3. ..
+3. AI Text generation Journal 
 
 
 Problems Solved:
@@ -39,5 +39,59 @@ for the different weapons that the player can use in the game. The player can se
 to utilize weapons in the game those being arrow, sword and fire respectively. The nature of the
 combat is like rock-paper-scissors such that the AI Player and computer both select weapons at
 the same time and depending on which on is selected, one weapon will beat the other or there 
-will be a tie. 
-    
+will be a tie. The AI is built off of reinforcement learning procedures as when the health of 
+the player drops to a certain level they will change their strategy and select different 
+weapons. 
+    Another AI element of the game implemented is the text-generated journal which generates 
+random journal entries for the player as they move from city to city. The model generates
+an initial entry for the first city that the player travels to and then builds upon that as it
+travels from city to city. At the end the player has a full journal of events that happened 
+through their journies through the cities. The AI is build off of the GPT2 tokenizer model using
+the PyTorch tool. The program takes the city names into the function and then uses the GPT2 model
+to generate a random array of words to suffice as an entry. 
+
+
+
+
+
+
+
+
+
+
+Appendix:
+
+ChatGPT Log 1: AI Text generation Journal
+
+we created a game using Python that let's you play as an elf who travels to different cities and can randomly  encounter robbers that he will have to fight. how could i use AI in python to implement a journaling system for the game 
+
+ChatGPT
+One way to implement a journaling system using AI in Python is to use Natural Language Processing (NLP) techniques to automatically generate summaries of the player's adventures.
+
+Here's a possible approach:
+
+Collect data: First, you need to collect data about the player's adventures in the game. This can include information such as the locations visited, encounters with robbers, items collected, and other relevant details.
+
+Preprocess the data: Next, you need to preprocess the data to make it suitable for analysis. This can involve cleaning and formatting the data, as well as applying NLP techniques such as tokenization, part-of-speech tagging, and named entity recognition to extract relevant information.
+
+Generate summaries: Once you have preprocessed the data, you can use AI techniques such as summarization to generate summaries of the player's adventures. There are different types of summarization techniques you can use, including extractive summarization (which involves selecting the most important sentences from the text) and abstractive summarization (which involves generating new sentences based on the input text).
+
+Display the summaries: Finally, you can display the generated summaries to the player in the game. This can be done using a text box or other user interface element that shows the summary of the player's adventure so far.
+
+To implement this approach, you can use Python libraries such as NLTK (Natural Language Toolkit) and spaCy for NLP, and libraries such as GPT
+
+how could i use journalling using text generation models text-to-image generation for the game 
+
+ChatGPT
+To implement a journaling system using text-to-image generation, you can use a combination of natural language processing (NLP) techniques and generative adversarial networks (GANs) to create visual representations of the player's adventures in the game.
+
+Here's a possible approach:
+
+Collect data: First, you need to collect data about the player's adventures in the game, including information such as the locations visited, encounters with robbers, items collected, and other relevant details.
+
+Preprocess the data: Next, you need to preprocess the data to make it suitable for analysis. This can involve
+
+
+
+
+
