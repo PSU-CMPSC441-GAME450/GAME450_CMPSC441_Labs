@@ -1,6 +1,4 @@
 Abstract:
-
-
     The goal of this project is to create an engaging game that challenges the player to explore
 different cities and fight robbers along the way. The player will control an elf character 
 and navigate through a map with different cities marked. An AI player will be programmed 
@@ -21,3 +19,25 @@ How the player moves, the combat they engage in, and the cost to travel between 
 determinant on the AI techniques. 
 
 
+AI components:
+1. AI Player movement 
+2. AI Player combat 
+3. ..
+
+
+Problems Solved:
+    For the AI Player movement the random function within Python was utilized along with some 
+conditions based on the crieria of the game. In the game the player can use the number keys 
+0-9 to move the player from one city to another. For the AI Player to select what city they 
+move to an random function was coded to return a value between 0 and 9. However for the game
+the player can only move between cities where there is an existing path. So for the project 
+a checking system had to be implemented when the AI Player selects this number. If there is 
+no existing path between the cities that they try to travel to then they have to select 
+another option. 
+    For the AI Player combat the random function within Python was utilized with selections 
+for the different weapons that the player can use in the game. The player can select a,s or f 
+to utilize weapons in the game those being arrow, sword and fire respectively. The nature of the
+combat is like rock-paper-scissors such that the AI Player and computer both select weapons at
+the same time and depending on which on is selected, one weapon will beat the other or there 
+will be a tie. 
+    
