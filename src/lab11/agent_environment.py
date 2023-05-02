@@ -6,6 +6,7 @@ from pygame_combat import run_pygame_combat
 from pygame_human_player import PyGameHumanPlayer
 from landscape import get_landscape, get_combat_bg
 from pygame_ai_player import PyGameAIPlayer
+from journaling import generate_journal_entry
 
 from pathlib import Path
 
@@ -102,7 +103,8 @@ if __name__ == "__main__":
     """ Add a line below that will reset the player variable to 
     a new object of PyGameAIPlayer class."""
     player = PyGameAIPlayer()
-    
+
+
     state = State(
         current_city=start_city,
         destination_city=start_city,
@@ -111,6 +113,9 @@ if __name__ == "__main__":
         cities=cities,
         routes=routes,
     )
+
+    journal_entries = {}
+
 
     while True:
         action = player.selectAction(state)
@@ -124,6 +129,9 @@ if __name__ == "__main__":
                 print(
                     "Travelling from", state.current_city, "to", state.destination_city
                 )
+
+                city_name = city_names[state.destination_city]
+                journal_entries[city_name] = generate_journal_entry(city_name)
 
         screen.fill(black)
         screen.blit(landscape_surface, (0, 0))
@@ -144,6 +152,7 @@ if __name__ == "__main__":
         if not state.travelling:
             encounter_event = False
             state.current_city = state.destination_city
+            print("Journal entry:", journal_entries.get(city_names[state.current_city], ""))
 
         if state.encounter_event:
             run_pygame_combat(combat_surface, screen, player_sprite)
