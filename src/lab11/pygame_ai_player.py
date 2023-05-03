@@ -18,10 +18,7 @@ class PyGameAIPlayer:
                     return action
             return ord(str(state.current_city))  # Not a safe operation for >10 cities
 
-
 """ Create PyGameAICombatPlayer class here"""
-
-
 class PyGameAICombatPlayer(CombatPlayer):
     def __init__(self, name):
         super().__init__(name)
