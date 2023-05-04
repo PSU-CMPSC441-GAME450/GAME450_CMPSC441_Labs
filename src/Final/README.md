@@ -6,7 +6,7 @@ This leads me into my reflection section. Looking back at this project, I wish I
     
 Appendix
 https://huggingface.co/nvidia/GPT-2B-001
-
+https://stackoverflow.com/questions/38001898/what-fonts-can-i-use-with-pygame-font-font
 https://chat.openai.com/?model=text-davinci-002-render-sha
 Help me write a python function to see if a route is valid, routes is set up like this [[[x1,y1],[x2,y2]]] it is a numpy array
 ChatGPT
