@@ -13,13 +13,13 @@ fulfilled. Clearly explain in comments which line of code and variables are used
 import matplotlib.pyplot as plt
 import pygad
 import numpy as np
-
 import sys
 from pathlib import Path
 
 sys.path.append(str((Path(__file__) / ".." / ".." / "..").resolve().absolute()))
 
-from src.lab5.landscape import elevation_to_rgba, get_elevation
+#from src.lab5.landscape import elevation_to_rgba, get_elevation
+from lab11.landscape import elevation_to_rgba, get_elevation
 
 
 def game_fitness(cities, idx, elevation, size):
@@ -53,27 +53,25 @@ def game_fitness(cities, idx, elevation, size):
             if(elevation[c[0]][c[1]] > 0.35):
                 fitness += 1
         if (elevation[c[0]][c[1]] > 0.7 or elevation[c[0]][c[1]] < 0.35):       # adjust to unacceptable fit for unusable elevation
-                fitness -= 10000
+                fitness -= 1000
         for comp in comparison:                         # compare each city to its neighbors
                 if (track1 != track2):                  # do not compare a city to itself
-                    if(abs(c[0] - comp[0]) > 90 & abs(c[1]-comp[1]) > 80):    # increase fitness for great diffusion
-                        fitness += 3
-                    elif(abs(c[0] - comp[0]) > 70 & abs(c[1]-comp[1]) > 60):  # increase fitness for acceptale diffusion
-                        fitness += 2.75
-                    elif(abs(c[0] - comp[0]) > 50 & abs(c[1]-comp[1]) > 40):  # increase fitness for acceptale diffusion
-                        fitness += 2.55
+                    if(abs(c[0] - comp[0]) > 20 & abs(c[1]-comp[1]) > 20):  # increase fitness for acceptale diffusion
+                        fitness += 2.3
+                    elif(abs(c[0] - comp[0]) > 17 & abs(c[1]-comp[1]) > 17):  # increase fitness for acceptale diffusion
+                        fitness += 2.15
                         allSpacedWide = 0                                       # all cities cannot be spaced widely
-                    elif(abs(c[0] - comp[0]) > 30 & abs(c[1]-comp[1]) > 20):  # increase fitness for acceptale diffusion
+                    elif(abs(c[0] - comp[0]) > 15 & abs(c[1]-comp[1]) > 15):  # increase fitness for acceptale diffusion
                         fitness += 2            
                         allSpacedWide = 0                                       # all cities cannot be spaced widely
                         spaced = 0                                              # cities are not spaced
-                    elif(abs(c[0] - comp[0]) < 30 & abs(c[1]-comp[1]) < 20):  # decrease fitness for poor diffusion
-                        fitness -= 3
+                    elif(abs(c[0] - comp[0]) <= 15 & abs(c[1]-comp[1]) <= 15):  # decrease fitness for poor diffusion
+                        fitness -= 5
                         spaced = 0 
                         allSpaced = 0                                             # cities are not spaced
                         allSpacedWide = 0                                       # all cities cannot be spaced widely
-                    if(abs(c[0] - comp[0]) < 25 & abs(c[1]-comp[1]) < 15):      # decrease fitness for horrible diffusion
-                        fitness -= 5
+                    if(abs(c[0] - comp[0]) < 10 & abs(c[1]-comp[1]) < 10):      # decrease fitness for horrible diffusion
+                        fitness -= 10
                         spaced = 0                                              # cities are not spaced
                         allSpacedWide = 0                                       # cities cannot be spaced widely
                         allSpaced = 0                                           # cities cannot be spaced in general
@@ -82,15 +80,15 @@ def game_fitness(cities, idx, elevation, size):
                         fitness -= 20
                     else:                                                       # increase fitness if spaced
                         fitness += 10                       
-                    if(abs(c[0] - comp[0]) > 90 & abs(c[1]-comp[1]) > 80):                  # set value for extra large spacing
+                    if(abs(c[0] - comp[0]) > 20 & abs(c[1]-comp[1]) > 20):                  # set value for extra large spacing
                         magnitude = min(magnitude, 5)
-                        if(abs(c[0] - comp[0]) < 90 & abs(c[1]-comp[1]) < 80):              # set value for no extra large spacing 
+                        if(abs(c[0] - comp[0]) < 17 & abs(c[1]-comp[1]) < 17):              # set value for no extra large spacing 
                             magnitude = min(magnitude, 4)
-                            if(abs(c[0] - comp[0]) < 70 & abs(c[1]-comp[1]) < 60):          # set value for no large spacing
+                            if(abs(c[0] - comp[0]) < 16 & abs(c[1]-comp[1]) < 16):          # set value for no large spacing
                                 magnitude = min(magnitude, 3)
-                                if(abs(c[0] - comp[0]) < 50 & abs(c[1]-comp[1]) < 40):      # set value for no medium spacing
+                                if(abs(c[0] - comp[0]) < 15 & abs(c[1]-comp[1]) < 15):      # set value for no medium spacing
                                     magnitude = min(magnitude, 2)
-                                    if(abs(c[0] - comp[0]) < 30 & abs(c[1]-comp[1]) < 20):  # set value for no small spacing
+                                    if(abs(c[0] - comp[0]) < 10 & abs(c[1]-comp[1]) < 10):  # set value for no small spacing
                                         magnitude = 1
                 track2 += 1                     
         track1 += 1
@@ -191,7 +189,29 @@ def show_cities(cities, landscape_pic, cmap="gist_earth"):
     plt.plot(cities[:, 1], cities[:, 0], "r.")
     plt.show()
 
+def make_cities(size, n_cities):
+    """
+    Make the cities based on the properties of that city (elevation)
+    Use a genetic algorithm to optimize these cities
+    """
+    # get the elevations of all cities
+    elevation = get_elevation(size,3)
+    # compare the elevations of all cities
+    elevation = np.array(elevation)
+    standardizedMin = elevation - elevation.min()
+    range = elevation.max() - elevation.min()
+    elevation = standardizedMin/range
 
+    # create a genetic algorithm that utilizes a fitness function
+    fitness = lambda cities, idx: game_fitness(
+        cities, idx, elevation=elevation, size=size
+    )
+    ff, ga_instance = setup_GA(fitness, n_cities, size)
+    ga_instance.run()
+    cities = ga_instance.best_solution()[0]
+    cities_t = solution_to_cities(cities, size)
+    return cities_t
+    
 if __name__ == "__main__":
     print("Initial Population")
 

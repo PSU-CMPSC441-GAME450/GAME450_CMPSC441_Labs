@@ -48,8 +48,8 @@ def draw_combat_on_window(combat_surface, screen, player_sprite, opponent_sprite
 
 def run_turn(currentGame, player, opponent):
     players = [player, opponent]
-    state = (player.health, opponent.health)
-    states = list([state, tuple(reversed(state))])
+    state = (player.health, player.weapon)
+    states = list([state, tuple(reversed(state) for player in players)])
     for current_player, state in zip(players, states):
         current_player.selectAction(state)
 
@@ -67,7 +67,7 @@ def run_pygame_combat(combat_surface, screen, player_sprite):
     player = PyGameHumanCombatPlayer("Legolas")
     """ Add a line below that will reset the player object
     to an instance of the PyGameAICombatPlayer class"""
-    player = PyGameAICombatPlayer
+    player = PyGameAICombatPlayer("Legolas")
 
     opponent = PyGameComputerCombatPlayer("Computer")
     opponent_sprite = Sprite(
@@ -77,4 +77,5 @@ def run_pygame_combat(combat_surface, screen, player_sprite):
     # Main Game Loop
     while not currentGame.gameOver:
         draw_combat_on_screen(combat_surface, screen, player_sprite, opponent_sprite)
-        run_turn(currentGame, player, opponent)
+        result = run_turn(currentGame, player, opponent)
+    return result

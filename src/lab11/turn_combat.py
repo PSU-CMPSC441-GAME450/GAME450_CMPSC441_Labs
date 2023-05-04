@@ -79,8 +79,7 @@ class Combat:
             self.gameOver = True
             print("*** Draw ***")
             return 0
-        return 0
-
+        
     def displayResult(self, player, opponent):
         print(
             "%s used a %s, %s used a %s \n"
